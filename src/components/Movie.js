@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://api.themoviedb.org/3/movie/popular?api_key=c1ed05456719687e3d0fe7eb91100626";
+const API_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c1ed05456719687e3d0fe7eb91100626";
 const API_IMG = "https://image.tmdb.org/t/p/w500";
 
-const Collection = () => {
+const Movie = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
@@ -65,4 +65,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default Movie;
