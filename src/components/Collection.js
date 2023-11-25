@@ -23,10 +23,10 @@ const Collection = () => {
   };
 
   return (
-    <section id="movies">
+    <section id="popular">
       <div className="max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
         <header className="text-center">
-          <h2 className="text-xl font-bold text-light-900 sm:text-7xl">Now Playing</h2>
+          <h2 className="text-xl font-bold text-light-900 sm:text-7xl">Popular</h2>
           <p className="max-w-md mx-auto mt-4 text-md text-light-500">Nikmati film yang ramai dibicarakan, serial populer, dan lainnya </p>
         </header>
         <ul className="grid gap-4 mt-8 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Landing = () => {
   return (
     <section className="bg-black-50">
@@ -11,12 +13,12 @@ const Landing = () => {
           <p className="mt-4 sm:text-xl/relaxed">Keep the younger ones entertained and watch your favourite global content, all in the same app </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a className="block w-full rounded px-12 py-3 text-sm font-medium text-red-600 shadow hover:text-red-700 focus:outline-none focus:ring active:text-red-500 sm:w-auto" href="/about">
+            <Link className="block w-full rounded px-12 py-3 text-sm font-medium text-red-600 shadow hover:text-red-700 focus:outline-none focus:ring active:text-red-500 sm:w-auto" href="/hal/about">
               Learn More
-            </a>
-            <a className="block w-full rounded bg-red-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-red-700 focus:outline-none focus:ring active:bg-red-500 sm:w-auto" href="/get-started">
+            </Link>
+            <Link className="block w-full rounded bg-red-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-red-700 focus:outline-none focus:ring active:bg-red-500 sm:w-auto" href="/hal/started">
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </div>

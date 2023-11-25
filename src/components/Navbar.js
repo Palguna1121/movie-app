@@ -1,6 +1,12 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Landing from "./Landing";
 
 const API_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=c1ed05456719687e3d0fe7eb91100626";
+const API_IMG = "https://image.tmdb.org/t/p/w500";
+const NULL_IMG = "https://i.pinimg.com/236x/ef/20/6f/ef206fbf6e7b9357eace54ff1f10a0ab.jpg";
+const NULL_IMG2 = "https://i.pinimg.com/236x/e1/fa/6e/e1fa6e8a8d0b5545db092d84583aeb0e.jpg";
+const NULL_IMG3 = "https://i.pinimg.com/564x/13/5e/49/135e49ff85a3c8b49d721ba1b2d45ea3.jpg";
 const API_SEARCH = "https://api.themoviedb.org/3/search/movie?api_key=c1ed05456719687e3d0fe7eb91100626&query=";
 
 const Navbar = () => {
@@ -29,14 +35,22 @@ const Navbar = () => {
     { href: "#tv-shows", label: "TV Shows" },
   ];
 
+  if (!movies) {
+    return (
+      <div className="flex justify-center items-center content-center w-full h-full">
+        <p className="m-1 p-72 text-2xl text-red-400">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className="sm:px-8 px-4 py-2 z-10 w-full">
         <nav className="flex justify-between items-center max-container">
           <div className="flex justify-between items-center mt-3">
-            <a href="/" className="text-3xl font-bold mr-16 text-red-600">
+            <Link href="/" className="text-3xl font-bold mr-16 text-red-600">
               N Station
-            </a>
+            </Link>
             <ul className="flex justify-center items-center gap-16 max-lg:hidden">
               {navLinks.map((item) => (
                 <li key={item.label}>
@@ -77,6 +91,30 @@ const Navbar = () => {
             }}
           ></div>
         </nav>
+
+        {/* halaman landing */}
+
+        <Landing />
+
+        {/* akhir landing */}
+
+        <ul className="grid gap-4 mt-8 grid-cols-4">
+          {movies.map((movie) => (
+            <li key={movie.id} className="my-3 relative">
+              <Link href={`/movie/${movie.id}`}>
+                <div className="block overflow-hidden group">
+                  <img src={movie.poster_path ? API_IMG + movie.poster_path : NULL_IMG3} alt={`poster for ${movie.poster_path}`} className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-110 sm:h-[450px]" />
+                  <div className="absolute inset-0 flex flex-col items-start justify-end p-4">
+                    <span className="mt-1.5 inline-block bg-black px-5 bg-opacity-70 py-3 text-xs rounded-md font-medium uppercase tracking-wide text-white">
+                      <h5 className="text-md font-bold text-amber-100">{movie.title}</h5>
+                      Rating : {movie.vote_average}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </header>
       {isMenuOpen && (
         <div>
