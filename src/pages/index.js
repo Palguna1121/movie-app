@@ -4,6 +4,7 @@ import Collection from "@/components/Collection";
 import Category from "@/components/Category";
 import Movie from "@/components/Movie";
 import Navbar from "@/components/Navbar";
+import Landing from "@/components/Landing";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      <Landing />
       <Movie />
       <Collection />
       <Category />

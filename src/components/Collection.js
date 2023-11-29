@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://api.themoviedb.org/3/movie/popular?api_key=c1ed05456719687e3d0fe7eb91100626";
-const API_IMG = "https://image.tmdb.org/t/p/w500";
+const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const API_IMG = process.env.NEXT_PUBLIC_TMDB_API_IMG;
 
 const Collection = () => {
   const [movies, setMovies] = useState([]);
@@ -13,6 +13,17 @@ const Collection = () => {
       .then((res) => res.json())
       .then((data) => setMovies(data.results));
   }, []);
+
+  if (!movies) {
+    return (
+      <div className="flex space-x-2 justify-center items-center bg-black h-screen">
+        <span className="sr-only">Loading...</span>
+        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce"></div>
+      </div>
+    );
+  }
 
   const openOverview = (movie) => {
     setSelectedMovie(movie);
