@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const API_IMG = process.env.NEXT_PUBLIC_TMDB_API_IMG;
 const NULL_IMG = process.env.NEXT_PUBLIC_NULL_IMG1;
 const NULL_IMG2 = process.env.NEXT_PUBLIC_NULL_IMG2;
@@ -16,7 +16,7 @@ const Movie = () => {
   const [term, setTerm] = useState("");
 
   useEffect(() => {
-    fetch(API_URL)
+    fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => setMovies(data.results));
   }, []);
@@ -28,6 +28,12 @@ const Movie = () => {
       .then((res) => res.json())
       .then((data) => setMovies(data.results))
       .catch((error) => console.log(error));
+  };
+
+  const getRandomNullImage = () => {
+    const nullImages = [NULL_IMG, NULL_IMG2, NULL_IMG3];
+    const randomIndex = Math.floor(Math.random() * nullImages.length);
+    return nullImages[randomIndex];
   };
 
   const openOverview = (movie) => {
@@ -82,7 +88,11 @@ const Movie = () => {
             <li key={movie.id} className="my-3 relative">
               <Link href={`/movie/${movie.id}`}>
                 <div className="block overflow-hidden group">
-                  <img src={movie.poster_path ? API_IMG + movie.poster_path : NULL_IMG3} alt={`poster for ${movie.poster_path}`} className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-110 sm:h-[450px]" />
+                  <img
+                    src={movie.poster_path ? API_IMG + movie.poster_path : getRandomNullImage()}
+                    alt={`poster for ${movie.poster_path}`}
+                    className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-110 sm:h-[450px]"
+                  />
                   <div className="absolute inset-0 flex flex-col items-start justify-end p-4">
                     <span className="mt-1.5 inline-block bg-black px-5 bg-opacity-70 py-3 text-xs rounded-md font-medium uppercase tracking-wide text-white">
                       <h5 className="text-md font-bold text-amber-100">{movie.title}</h5>

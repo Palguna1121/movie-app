@@ -1,15 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.css";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
-const API_IMG = process.env.NEXT_PUBLIC_TMDB_API_IMG;
 
 const Landing = () => {
   const [movies, setMovies] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const progressCircle = useRef(null);
+  const progressContent = useRef(null);
 
   useEffect(() => {
     fetch(API_URL)
@@ -28,44 +34,47 @@ const Landing = () => {
     );
   }
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 7000,
-    pauseOnHover: true,
-    afterChange: (index) => setCurrentSlide(index),
-  };
-
   return (
-    <div>
-      <section className="m-5 pt-36 relative">
-        <Slider {...settings} className="z-0">
-          {movies.map((movie, index) => (
-            <div key={movie.id} className="relative">
-              <div
-                className="w-full h-full object-cover absolute top-0 left-0 z-0"
-                style={{
-                  backgroundImage: `url('${API_IMG}${movie.backdrop_path}')`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-              <div className="relative z-10 text-white text-start p-8">
-                <h2 className="text-2xl font-bold">{movie.title}</h2>
-                <p className="text-lg font-semibold">{movie.overview}</p>
+    <>
+      <Swiper
+        spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={{
+          clickable: true,
+        }}
+        modules={[Autoplay, Pagination, Navigation]}
+        className="mySwiper relative mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8"
+        style={{ maxWidth: "100vw" }}
+      >
+        {movies.map((movie, index) => (
+          <SwiperSlide key={movie.id} className="relative mx-auto">
+            <div
+              className="h-screen w-screen bg-cover bg-center relative"
+              style={{
+                backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})`,
+                width: "100vw",
+              }}
+            >
+              <div className="absolute inset-0 bg-black opacity-40"></div>
+              <div className="absolute inset-0 flex flex-col justify-end p-24">
+                <h2 className="text-2xl font-bold text-white">{movie.title}</h2>
+                <p className="text-lg font-semibold text-white mt-2">{movie.overview}</p>
                 <Link href={`/movie/${movie.id}`}>
                   <p className="inline-block mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">More</p>
                 </Link>
               </div>
             </div>
-          ))}
-        </Slider>
-      </section>
-    </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
   );
 };
 
