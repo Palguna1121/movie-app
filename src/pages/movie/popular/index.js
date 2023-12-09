@@ -1,8 +1,9 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
+import HeaderMenu from "@/components/Utilities/HeaderMenu";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const API_URL = process.env.NEXT_PUBLIC_TMDB_API_URL;
 const API_IMG = process.env.NEXT_PUBLIC_TMDB_API_IMG;
 
 const Popular = () => {
@@ -11,7 +12,7 @@ const Popular = () => {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`)
+    fetch(API_URL)
       .then((res) => res.json())
       .then((data) => setMovies(data.results));
   }, []);
@@ -22,17 +23,6 @@ const Popular = () => {
       .then((data) => setGenres(data.genres))
       .catch((error) => console.error("Error fetching genres:", error));
   }, []);
-
-  if (!movies) {
-    return (
-      <div className="flex space-x-2 justify-center items-center bg-black h-screen">
-        <span className="sr-only">Loading...</span>
-        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-8 w-8 bg-red-600 rounded-full animate-bounce"></div>
-      </div>
-    );
-  }
 
   const genresMap = genres.reduce((acc, genre) => {
     acc[genre.id] = genre.name;
@@ -52,10 +42,7 @@ const Popular = () => {
       <Navbar />
       <section>
         <div className="max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
-          <header className="text-center">
-            <h2 className="text-xl font-bold text-light-900 sm:text-7xl">Top Rated Films</h2>
-            <p className="max-w-md mx-auto mt-4 text-md text-light-500">.... </p>
-          </header>
+          <HeaderMenu title={"Popular"} subTitle={"Nikmati film yang ramai dibicarakan, serial populer, dan lainnya"} />
           <ul className="grid gap-4 mt-8 sm:grid-cols-2 lg:grid-cols-4">
             {movies.map((movie) => (
               <li key={movie.id} className="my-3 relative">

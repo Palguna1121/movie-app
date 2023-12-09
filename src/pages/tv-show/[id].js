@@ -18,7 +18,7 @@ const MovieDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`);
+        const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`);
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }
@@ -31,7 +31,7 @@ const MovieDetail = () => {
 
     const fetchCast = async () => {
       try {
-        const castResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}`);
+        const castResponse = await fetch(`https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}`);
         if (!castResponse.ok) {
           throw new Error("Failed to fetch cast");
         }
@@ -75,10 +75,10 @@ const MovieDetail = () => {
       <div className="detail h-screen bg-cover bg-center" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})` }}>
         <div className="relative h-full bg-black bg-opacity-70 flex flex-col md:flex-row gap-8 md:gap-16 px-24 py-10">
           <div className="detail-card overflow-hidden self-center rounded-2xl w-72">
-            <img src={movie.poster_path ? API_IMG + movie.poster_path : getRandomNullImage()} loading="..." alt={`poster for ${movie.title}`} />
+            <img src={movie.poster_path ? API_IMG + movie.poster_path : getRandomNullImage()} loading="..." alt={`poster for ${movie.name}`} />
           </div>
           <div className="mt-24 detail-content text-white md:flex-1">
-            <div className="name text-white text-4xl tracking-widest font-extrabold">{movie.title}</div>
+            <div className="name text-white text-4xl tracking-widest font-extrabold">{movie.name}</div>
             <div className="info flex items-center gap-2 md:gap-4 text-sm mt-4">
               <span className="tracking-widest">
                 {movie.spoken_languages.map((lang, index) => (

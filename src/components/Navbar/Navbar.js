@@ -1,14 +1,10 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import InputSearch from "./InputSearch";
+import Dropdown from "./Dropdown";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/popular", label: "Popular" },
-    { href: "/tv-shows", label: "TV Shows" },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +22,29 @@ const Navbar = () => {
     };
   }, []);
 
+  const movieLinks = {
+    title: "Movie",
+    link1: "/movie/popular",
+    link2: "/movie/now-playing",
+    link3: "/movie/upcoming",
+    link4: "/movie/top-rated",
+    label1: "Popular",
+    label2: "Now Playing",
+    label3: "Upcoming",
+    label4: "Top Rated",
+  };
+  const TvLinks = {
+    title: "Tv Show",
+    link1: "/tv-show/popular",
+    link2: "/tv-show/airing-today",
+    link3: "/tv-show/on-tv",
+    link4: "/tv-show/top-rated",
+    label1: "Popular",
+    label2: "Airing Today",
+    label3: "On Tv",
+    label4: "Top Rated",
+  };
+
   return (
     <>
       <header className={`sm:px-8 px-4 z-10 w-full top-0 fixed transition-all duration-700 ${isScrolled ? "bg-black" : "bg-transparent"}`}>
@@ -35,13 +54,15 @@ const Navbar = () => {
               N Station
             </Link>
             <ul className="flex justify-center items-center gap-16">
-              {navLinks.map((item) => (
-                <li key={item.label}>
-                  <a href={item.href} className="font-montserrat leading-normal text-lg text-slate-gray">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Dropdown {...movieLinks} />
+              </li>
+              <li>
+                <Dropdown {...TvLinks} />
+              </li>
+              <li>
+                <InputSearch />
+              </li>
             </ul>
           </div>
         </nav>
