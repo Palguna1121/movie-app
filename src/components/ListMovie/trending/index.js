@@ -9,12 +9,13 @@ import { FreeMode, Navigation, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import HeaderMenu from "@/components/Utilities/HeaderMenu";
 
-const Trendweek = () => {
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+
+const Trending = () => {
   const [genres, setGenres] = useState([]);
   const [nowplayingMovies, setNowplayingMovies] = useState([]);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
     fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => setGenres(data.genres))
@@ -22,13 +23,10 @@ const Trendweek = () => {
   }, []);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-
-    fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}`)
+    fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => {
-        // Pastikan struktur respons sesuai dengan yang diharapkan
-        const nowplayingMoviesData = data.results || []; // Ganti dengan properti yang benar jika perlu
+        const nowplayingMoviesData = data.results || [];
         setNowplayingMovies(nowplayingMoviesData);
       })
       .catch((error) => console.error("Error fetching nowplaying movies:", error));
@@ -36,7 +34,7 @@ const Trendweek = () => {
 
   return (
     <>
-      <HeaderMenu title={"Trending this week"} subTitle={"Nikmati film yang ramai dibicarakan, serial populer, dan lainnya"} />
+      <HeaderMenu title={"Trending"} subTitle={"Nikmati film yang ramai dibicarakan, serial populer, dan lainnya"} />
       <div className="mx-8">
         <Swiper
           slidesPerView={5}
@@ -82,4 +80,4 @@ const Trendweek = () => {
   );
 };
 
-export default Trendweek;
+export default Trending;

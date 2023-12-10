@@ -72,7 +72,7 @@ const MovieDetail = () => {
   return (
     <>
       <Navbar />
-      <div className="detail h-screen bg-cover bg-center" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})` }}>
+      <div className="detail h-screen bg-cover bg-center" style={{ backgroundImage: `url(${movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280` + movie.backdrop_path : getRandomNullImage()})` }}>
         <div className="relative h-full bg-black bg-opacity-70 flex flex-col md:flex-row gap-8 md:gap-16 px-24 py-10">
           <div className="detail-card overflow-hidden self-center rounded-2xl w-72">
             <img src={movie.poster_path ? API_IMG + movie.poster_path : getRandomNullImage()} loading="..." alt={`poster for ${movie.title}`} />

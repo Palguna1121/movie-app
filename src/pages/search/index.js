@@ -17,6 +17,76 @@ const Search = () => {
   const router = useRouter();
   const [term, setTerm] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [counts, setCounts] = useState({
+    total_pages: 500,
+    total_results: 10000,
+  });
+
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const handleScrollTop = () => {
+    const scrollY = window.scrollY;
+
+    // Tandai apakah tombol scroll harus ditampilkan
+    if (scrollY > 200) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollTop);
+    return () => window.removeEventListener("scroll", handleScrollTop);
+  }, []);
+
+  const hasNext = counts.total_pages > currentPage;
+
+  const loadMoreItems = () => {
+    if (hasNext) {
+      setCurrentPage((page) => page + 1);
+    }
+  };
+
+  useEffect(() => {
+    fetch(`${API_SEARCH}${term}&page=${currentPage}`)
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json?.results) {
+          throw new Error(json?.statusMessage ?? "Error");
+        }
+        setMovies((previous) => (currentPage === 1 ? json.results : [...previous, ...json.results]));
+        setCounts({
+          total_pages: json.total_pages,
+          total_results: json.total_results,
+        });
+      })
+      .catch((error) => console.error("Error:", error));
+  }, [currentPage]);
+
+  const handleScroll = () => {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+    if (windowBottom >= docHeight - 1) {
+      loadMoreItems();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}`)
       .then((res) => res.json())
@@ -54,7 +124,7 @@ const Search = () => {
   return (
     <>
       <Navbar />
-      <section className="py-10 h-[2750px]">
+      <section className="py-10">
         <div className="max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
           <div className="flex justify-start leading-normal font-medium font-montserrat">
             <form className="px-4 w-screen" onSubmit={handleSearch}>
@@ -82,9 +152,17 @@ const Search = () => {
           {searchedTerm && (
             <div className="mt-8">
               {searchResultsAvailable ? (
-                <h2 className="flex justify-start mx-5 font-bold text-2xl">Hasil pencarian untuk "{searchedTerm}"</h2>
+                <h2 className="flex justify-start mx-5 font-bold text-2xl">
+                  Hasil pencarian untuk {'"'}
+                  {searchedTerm}
+                  {'"'}
+                </h2>
               ) : (
-                <h2 className="flex justify-start mx-5 font-bold text-2xl">Tidak ada hasil untuk "{searchedTerm}"</h2>
+                <h2 className="flex justify-start mx-5 font-bold text-2xl">
+                  Tidak ada hasil untuk {'"'}
+                  {searchedTerm}
+                  {'"'}
+                </h2>
               )}
             </div>
           )}
@@ -112,6 +190,13 @@ const Search = () => {
             </ul>
           )}
         </div>
+        {showScrollButton && (
+          <button className="fixed bottom-10 right-10 bg-red-600 text-white p-8 rounded-full shadow-md transition duration-300 ease-in-out hover:bg-red-700 focus:outline-none" onClick={scrollToTop}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 384 512">
+              <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
+            </svg>
+          </button>
+        )}
       </section>
     </>
   );

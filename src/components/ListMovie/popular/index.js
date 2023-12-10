@@ -9,12 +9,13 @@ import { FreeMode, Navigation, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import HeaderMenu from "@/components/Utilities/HeaderMenu";
 
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+
 const Popular = () => {
   const [genres, setGenres] = useState([]);
   const [nowplayingMovies, setNowplayingMovies] = useState([]);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
     fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => setGenres(data.genres))
@@ -22,8 +23,6 @@ const Popular = () => {
   }, []);
 
   useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-
     fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => {
